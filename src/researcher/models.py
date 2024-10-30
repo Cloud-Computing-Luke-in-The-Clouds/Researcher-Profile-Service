@@ -6,6 +6,8 @@ from src.database import Base
 class ResearchProfile(Base):
     __tablename__ = "ResearchProfile"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    researcher_name = Column(String(255))
+    image_url = Column(String(255))
     google_scholar_link = Column(String(255))
     personal_website_link = Column(String(255))
     organization = Column(String(255), index=True)

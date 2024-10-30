@@ -14,6 +14,8 @@ class ResearchPaper(BaseModel):
 
 
 class ResearchProfile(BaseModel):
+    researcher_name: Optional[str] = None
+    image_url: Optional[str] = None
     google_scholar_link: Optional[str] = None
     personal_website_link: Optional[str] = None
     organization: Optional[str] = None
