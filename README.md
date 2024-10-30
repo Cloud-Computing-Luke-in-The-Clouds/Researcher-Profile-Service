@@ -29,5 +29,5 @@
 
 2. Deploy to GCP cloud run
    ```
-   gcloud run deploy sample --port 8080 --source .
+   gcloud run deploy researcher-profile --port 8080 --source .
    ```
