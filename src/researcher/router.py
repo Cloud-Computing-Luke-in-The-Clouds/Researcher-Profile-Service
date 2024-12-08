@@ -74,14 +74,14 @@ async def get_all_researchers(db: Session = Depends(get_db)):
 # Add token verification to other endpoints...
 @router.get("/researcher/{researcher_id}")
 async def get_researcher_by_id(
-    researcher_id: int,
+    researcher_id: str,
     db: Session = Depends(get_db)
 ):
     return service.get_research_profile_by_id(db, researcher_id)
 
 @router.delete("/researcher/{researcher_id}")
 async def delete_researcher_by_id(
-    researcher_id: int,
+    researcher_id: str,
     db: Session = Depends(get_db)
 ):
     return service.delete_research_profile_by_id(db, researcher_id)
