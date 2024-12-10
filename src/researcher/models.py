@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text, JSON
 from src.database import Base
 
 class ResearchProfile(Base):

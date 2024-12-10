@@ -77,21 +77,33 @@ async def get_researcher_by_id(
     user_id: str,
     db: Session = Depends(get_db)
 ):
-    return service.get_research_profile_by_id(db, user_id)
+    researcher = service.get_research_profile_by_id(db, user_id)
+    if not researcher:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Researcher profile with ID {user_id} not found"
+        )
+    return researcher
 
 @router.delete("/researcher/{user_id}")
 async def delete_researcher_by_id(
     user_id: str,
     db: Session = Depends(get_db)
 ):
-    return service.delete_research_profile_by_id(db, user_id)
+    result = service.delete_research_profile_by_id(db, user_id)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Researcher profile with ID {user_id} not found"
+        )
+    return {"message": "Profile deleted successfully"}
 
 @router.post("/researcher", status_code=201)
 async def creat_new_researcher(research_profile: ResearchProfile,
                                db: Session = Depends(get_db)):
     
     response = service.create_research_profile(db, research_profile)
-    return {'link': f"{router.url_path_for('get_researcher_by_id', user_id = response.id)}; rel='self'"}
+    return {'link': f"{router.url_path_for('get_researcher_by_id', user_id = response.user_id)}; rel='self'"}
 
 @router.post("/background_add_researcher", status_code=202)
 async def background_add_new_researcher(research_profile: ResearchProfile, background_tasks: BackgroundTasks,
@@ -101,3 +113,22 @@ async def background_add_new_researcher(research_profile: ResearchProfile, backg
     background_tasks.add_task(service.create_research_profile, db, research_profile)
     return {'message': 'Research profile creation in progress.'}
 
+
+@router.put("/researcher/{user_id}")
+async def update_researcher(
+    user_id: str,
+    researcher: ResearchProfile,
+    db: Session = Depends(get_db)
+):
+    """Update a researcher's information"""
+    updated_researcher = service.update_research_profile(
+        db, 
+        user_id, 
+        researcher.model_dump(exclude_unset=True)
+    )
+    if not updated_researcher:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Researcher profile with ID {user_id} not found"
+        )
+    return updated_researcher
