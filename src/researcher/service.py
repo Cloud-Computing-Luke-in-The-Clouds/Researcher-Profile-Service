@@ -5,10 +5,10 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 
 def get_research_profile_by_id(db: Session, user_id: str):
     return (db.query(ResearchProfile)
-            .filter(ResearchProfile.id == user_id).first())
+            .filter(ResearchProfile.user_id == user_id).first())
 
 def get_all_research_profiles(db: Session, skip: int = 0, limit: int = 100):
-    return paginate(db, select(ResearchProfile).order_by(ResearchProfile.id), additional_data={
+    return paginate(db, select(ResearchProfile).order_by(ResearchProfile.user_id), additional_data={
             "link": ""
         })
 
@@ -26,6 +26,6 @@ def create_research_profile(db: Session, research_profile: ResearchProfile):
 
 def delete_research_profile_by_id(db: Session, user_id: str):
     (db.query(ResearchProfile)
-        .filter(ResearchProfile.id == user_id).delete())
+        .filter(ResearchProfile.user_id == user_id).delete())
     db.commit()
     return
