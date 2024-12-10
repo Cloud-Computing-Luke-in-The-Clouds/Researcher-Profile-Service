@@ -72,26 +72,26 @@ async def get_all_researchers(db: Session = Depends(get_db)):
     return profiles
 
 # Add token verification to other endpoints...
-@router.get("/researcher/{researcher_id}")
+@router.get("/researcher/{user_id}")
 async def get_researcher_by_id(
-    researcher_id: str,
+    user_id: str,
     db: Session = Depends(get_db)
 ):
-    return service.get_research_profile_by_id(db, researcher_id)
+    return service.get_research_profile_by_id(db, user_id)
 
-@router.delete("/researcher/{researcher_id}")
+@router.delete("/researcher/{user_id}")
 async def delete_researcher_by_id(
-    researcher_id: str,
+    user_id: str,
     db: Session = Depends(get_db)
 ):
-    return service.delete_research_profile_by_id(db, researcher_id)
+    return service.delete_research_profile_by_id(db, user_id)
 
 @router.post("/researcher", status_code=201)
 async def creat_new_researcher(research_profile: ResearchProfile,
                                db: Session = Depends(get_db)):
     
     response = service.create_research_profile(db, research_profile)
-    return {'link': f"{router.url_path_for('get_researcher_by_id', researcher_id = response.id)}; rel='self'"}
+    return {'link': f"{router.url_path_for('get_researcher_by_id', user_id = response.id)}; rel='self'"}
 
 @router.post("/background_add_researcher", status_code=202)
 async def background_add_new_researcher(research_profile: ResearchProfile, background_tasks: BackgroundTasks,
