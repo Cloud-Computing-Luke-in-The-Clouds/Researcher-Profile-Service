@@ -5,6 +5,8 @@ from src.researcher.router import router
 from fastapi_pagination import add_pagination
 from src.middleware_logging import log_requests
 from starlette.middleware.base import BaseHTTPMiddleware
+from strawberry.asgi import GraphQL
+from src.researcher.schema import schema
 
 app = FastAPI()
 
@@ -26,6 +28,7 @@ async def root():
 
 app.include_router(router)
 add_pagination(app)
+app.add_route("/graphql", GraphQL(schema))
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
